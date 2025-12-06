@@ -1,41 +1,543 @@
-<h1> Файл a.htm </h1>
-<html>
+<!doctype html>
+<html lang="ru">
 <head>
-    <title>Страны</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Магазин женской одежды — FashionStyle</title>
+
+<style>
+/* Сброс */
+*{margin:0;padding:0;box-sizing:border-box;}
+html, body{
+    font-family:Arial, sans-serif;
+    background:var(--bg);
+    color:#111;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* Переменные (сохранён стиль из предыдущего файла) */
+:root{
+    --bg:#f4f4f7;
+    --card-bg:#fff;
+    --accent:#e91e63;
+    --muted:#6b7280;
+    --gap:20px;
+
+    /* Тёмная тема (необязательно) */
+    --bg-dark:#1a1a1d;
+    --card-dark:#2a2a2d;
+    --text-dark:#e6e6e6;
+}
+
+/* Тёмная тема (хак с чекбоксом — оставлен как в исходном файле) */
+#theme-toggle:checked ~ body{
+    background:var(--bg-dark);
+    color:var(--text-dark);
+}
+#theme-toggle:checked ~ body .card{
+    background:var(--card-dark);
+}
+
+/* Кнопка переключения темы (как было) */
+.theme-button{
+    position:fixed;bottom:20px;right:20px;width:40px;height:40px;
+    background:var(--accent);border-radius:50%;cursor:pointer;z-index:50;
+}
+
+/* Шапка (сохранён дизайн) */
+.header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:15px 20px;background:#fff;border-bottom:1px solid #ddd;
+}
+.header .logo{
+    font-weight:bold;font-size:22px;color:var(--accent);
+}
+.nav a{
+    margin-left:20px;text-decoration:none;color:#333;font-weight:bold;
+}
+.nav a:hover{color:var(--accent);transition:0.3s;}
+
+/* Гамбургер */
+.nav-toggle{display:none;}
+.hamburger{
+    font-size:28px;display:none;cursor:pointer;color:var(--accent);
+}
+
+/* Макет (точно как в предыдущем файле) */
+.layout{
+    max-width:1200px;margin:20px auto;padding:0 15px;
+    display:grid;grid-template-columns:240px 1fr 300px;gap:var(--gap);
+}
+
+/* Сайдбары */
+.sidebar-left,.sidebar-right{
+    background:var(--card-bg);padding:20px;border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+.sidebar-left label{display:block;margin:10px 0;font-size:15px;}
+
+/* Карточки товаров (как было) */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--card-bg);border-radius:12px;overflow:hidden;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    transform:translateY(20px);opacity:0;animation:fadeUp 0.8s forwards;
+}
+.card:nth-child(2){animation-delay:0.1s;}
+.card:nth-child(3){animation-delay:0.2s;}
+.card:nth-child(4){animation-delay:0.3s;}
+.card:nth-child(5){animation-delay:0.4s;}
+.card:nth-child(6){animation-delay:0.5s;}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.12);
+    transition:0.25s;
+}
+
+.card img{width:100%;display:block;}
+.card-body{padding:15px;}
+.card .price{
+    color:var(--accent);font-weight:bold;font-size:18px;margin-top:5px;
+}
+.card button{
+    margin-top:10px;padding:8px 14px;background:var(--accent);
+    color:#fff;border:none;border-radius:6px;cursor:pointer;transition:0.3s;
+}
+.card button:hover{opacity:0.8;}
+
+.tags span{
+    margin-right:8px;color:var(--muted);font-size:14px;
+}
+
+/* Анимация появления */
+@keyframes fadeUp{
+    0%{opacity:0;transform:translateY(20px);}
+    100%{opacity:1;transform:translateY(0);}
+}
+
+/* Подписка (как в предыдущем) */
+.subscribe{
+    margin-top:40px;padding:20px;background:var(--card-bg);
+    border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+.subscribe form{display:flex;gap:10px;margin-top:15px;}
+.subscribe input{
+    flex:1;padding:10px;border:1px solid #ccc;border-radius:6px;
+}
+.subscribe button{
+    padding:10px 16px;background:var(--accent);
+    color:#fff;border:none;border-radius:6px;cursor:pointer;
+}
+
+/* Футер (как было) */
+.footer{
+    margin-top:40px;background:#2b2b2b;color:#eee;padding:30px;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;position:relative;
+}
+.footer a{color:#fff;}
+.to-top{position:absolute;right:20px;bottom:20px;color:#fff;}
+
+/* ---- КОРЗИНА: стили, встроенные в правый сайдбар, чтобы внешний вид совпадал ---- */
+.cart {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+.cart h3{margin-bottom:6px}
+.cart-empty{color:var(--muted)}
+.cart-list{display:flex;flex-direction:column;gap:12px;max-height:420px;overflow:auto;padding-right:6px}
+.cart-item{
+    display:flex;gap:10px;align-items:center;padding:10px;border-radius:8px;background:#fff;border:1px solid #f0f0f0;
+}
+.cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+.cart-item .info{flex:1}
+.qty-controls{display:flex;align-items:center;gap:8px}
+.qty-controls button{width:28px;height:28px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+
+/* Итоги и кнопки */
+.cart-footer{margin-top:auto;padding-top:10px;border-top:1px dashed #e6e6e6;display:flex;flex-direction:column;gap:8px}
+.cart-footer .total{font-weight:800;font-size:18px}
+.cart-footer button{padding:10px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+
+/* Скрытые элементы для доступности */
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+/* Адаптив (как было) */
+@media(max-width:1023px){
+    .layout{grid-template-columns:200px 1fr;}
+    .sidebar-right{display:none;} /* на планшете правая панель скрывается — как в предыдущем дизайне */
+}
+@media(max-width:767px){
+    .hamburger{display:block;}
+    .nav{
+        position:absolute;top:60px;left:0;right:0;background:#fff;
+        flex-direction:column;display:none;padding:10px;
+    }
+    #nav-toggle:checked ~ .nav{display:flex;}
+    .layout{grid-template-columns:1fr;}
+    .sidebar-left{order:1;}
+}
+
+/* Небольшая прокрутка для списка корзины */
+.cart-list::-webkit-scrollbar{width:8px}
+.cart-list::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:8px}
+</style>
 </head>
-<body bgcolor="orange" text="with">
-    <p><h3>США</h3></p>
-    <p>Соединённые Штаты Америки (США) — федеративная президентская республика в Северной Америке, состоящая из 50 штатов, столица — Вашингтон, официального языка нет, но доминирует английский; страна занимает 4-е место по территории и 3-е/4-е по населению. США — гигантская страна с разнообразным климатом, мощной экономикой, богатой историей (независимость 1776 г.) и культурой, известна такими явлениями, как Кремниевая долина, Голливуд, и является ведущей военной державой. </p>
-    <button><a href="https://youtu.be/5YkCHp7JL9E?si=I4L8IzMwPeIXi4N_"> USA </a> </button>
-</body>
-</html>
-<hr><br><br>
-<hr><p></p>
-<h1>Файл b.htm</h1> 
-<html>
+
+<!-- Переключатель темы (тот же элемент) -->
+<input type="checkbox" id="theme-toggle" hidden>
+<label for="theme-toggle" class="theme-button" aria-label="Сменить тему"></label>
+
 <body>
-    <p><h3>Германия</h3></p>
-    <p>Германия — это федеративная парламентская республика в Центральной Европе, столица — Берлин, население около 84 млн человек, крупнейшая экономика ЕС с сильным производством, особенно в автопроме, и богатым культурным наследием, член «Большой семерки», НАТО, ЕС. Она граничит с 9 странами, имеет выход к Северному и Балтийскому морям и известна своими разнообразными пейзажами от Альп до северных равнин.</p>
-    <button><a href="https://youtu.be/cy8OeontePE?si=Bxum7R3Y6b-qiB-l"> Germany </a> </button>
-</body>
-</html>
-<hr><br><br>
-<hr><p></p>
-<h1> Файл c.htm</h1>
-<html>
-<body>
-    <p><h3>Япония</h3></p>
-    <p>Япония — это островное государство в Восточной Азии, известное как «Страна восходящего солнца», где ультрасовременные технологии гармонично сочетаются с древними традициями, а природа поражает красотой гор, вулканов и горячих источников. Это высокоразвитая страна с конституционной монархией (император Нарухито), мощной экономикой (член G7) и высоким уровнем жизни, а её столица — Токио, один из крупнейших мегаполисов мира. Население страны (около 125 млн человек) на 99% состоит из этнических японцев, говорящих на японском языке, а основными религиями являются синтоизм и буддизм, мирно уживающиеся друг с другом.</p>
-    <button><a href="https://youtu.be/atoVvVZfbLI?si=avy4BU-mtTGcDqEv">Japan</a> </button>
-</body>
-</html>
-<hr><br><br>
-<hr><p></p>
-<h1>Файл d.htm</h1> 
-<html>
-<body>
-    <p><h3>Франция</h3></p>
-    <p>Франция — крупнейшая страна Западной Европы, известная своей богатой культурой, искусством, модой, кухней и живописными пейзажами, от Лазурного берега до Альп. Столица — Париж, официальный язык — французский, валюта — евро, а девиз — «Свобода, равенство, братство». Это член ЕС и НАТО, ядерная держава, привлекающая миллионы туристов своей историей, архитектурой, винами, сырами и высокой кухней </p>
-    <button><a href="https://youtu.be/sEBnjgtfIfQ?si=6YSjopgUgSatZxFi">France</a> </button>
+
+<header class="header">
+    <div class="logo">FashionStyle</div>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="hamburger">☰</label>
+
+    <nav class="nav">
+        <a href="#">Главная</a>
+        <a href="#cards">Каталог</a>
+        <a href="#subscribe">Подписка</a>
+        <a href="#footer">Контакты</a>
+    </nav>
+</header>
+
+<main class="layout">
+
+    <!-- Левый сайдбар (оставлен как был) -->
+    <aside class="sidebar-left">
+        <h3>Фильтры</h3>
+        <label><input type="checkbox"> Платья</label>
+        <label><input type="checkbox"> Верхняя одежда</label>
+        <label><input type="checkbox"> Джинсы</label>
+        <label><input type="checkbox"> Новинки</label>
+        <label><input type="checkbox"> Скидки</label>
+    </aside>
+
+    <!-- Центральная колонка — карточки (с данными в data-атрибутах) -->
+    <section class="content" id="cards">
+        <h2>Каталог женской одежды</h2>
+
+        <div class="cards" id="product-list">
+
+            <article class="card" data-id="p1" data-name="Летнее платье" data-price="3990">
+                <img src="https://basket-11.wbbasket.ru/vol1622/part162214/162214241/images/big/1.webp" alt="Летнее платье">
+                <div class="card-body">
+                    <h3>Летнее платье</h3>
+                    <p>Лёгкое, воздушное, идеально для прогулок.</p>
+                    <div class="price">3 990 сом</div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Летнее платье в корзину">В корзину</button>
+                </div>
+            </article>
+
+            <article class="card" data-id="p2" data-name="Платье-сарафан" data-price="4200">
+                <img src="https://cdn.velesmoda.ru/image/data/Rivoli/7116%20%281%29.jpg" alt="Платье-сарафан">
+                <div class="card-body">
+                    <h3>Платье-сарафан</h3>
+                    <p>Стильный вариант для жаркой погоды.</p>
+                    <div class="price">4 200 сом</div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Платье-сарафан в корзину">В корзину</button>
+                </div>
+            </article>
+
+            <article class="card" data-id="p3" data-name="Пальто oversize" data-price="7500">
+                <img src="https://ligio.ru/upload/resize_cache/iblock/197/1500_2000_2/2cq19xl81gurftr3xnktibln0w0wcenj.jpg" alt="Пальто oversize">
+                <div class="card-body">
+                    <h3>Пальто oversize</h3>
+                    <p>Тренд сезона, отлично подходит к джинсам.</p>
+                    <div class="price">7 500 сом</div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Пальто oversize в корзину">В корзину</button>
+                </div>
+            </article>
+
+            <article class="card" data-id="p4" data-name="Джинсы mom-fit" data-price="3200">
+                <img src="https://static.bershka.net/assets/public/9a5b/cfe3/d23b4b5eba05/d42d7b0a0de1/05039352811-p/05039352811-p.jpg?ts=1753971338341&w=375&f=auto" alt="Джинсы mom-fit">
+                <div class="card-body">
+                    <h3>Джинсы mom-fit</h3>
+                    <p>Удобная высокая посадка, плотный деним.</p>
+                    <div class="price">3 200 сом </div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Джинсы mom-fit в корзину">В корзину</button>
+                </div>
+            </article>
+
+            <article class="card" data-id="p5" data-name="Демисезонное пальто" data-price="6900">
+                <img src="https://basket-12.wbbasket.ru/vol1697/part169780/169780384/images/big/1.webp" alt="Демисезонное пальто">
+                <div class="card-body">
+                    <h3>Демисезонное пальто</h3>
+                    <p>Классический силуэт, удобная длина.</p>
+                    <div class="price">6 900 сом</div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Демисезонное пальто в корзину">В корзину</button>
+                </div>
+            </article>
+
+            <article class="card" data-id="p6" data-name="Платье вечернее" data-price="8400">
+                <img src="https://bel-avantage.ru/upload/iblock/8fb/iberia.jpg" alt="Платье вечернее">
+                <div class="card-body">
+                    <h3>Платье вечернее</h3>
+                    <p>Элегантность и комфорт в одном образе.</p>
+                    <div class="price">8 400 сом</div>
+                    <button class="add-to-cart" type="button" aria-label="Добавить Платье вечернее в корзину">В корзину</button>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- Подписка (как было) -->
+        <section id="subscribe" class="subscribe">
+            <h3>Подписка на новинки</h3>
+            <form onsubmit="event.preventDefault(); alert('Спасибо за подписку!');">
+                <input type="email" placeholder="Ваш email" required>
+                <button type="submit">Подписаться</button>
+            </form>
+        </section>
+
+    </section>
+
+    <!-- Правая панель — корзина (интегрирована сюда, дизайн сохранён) -->
+    <aside class="sidebar-right" aria-label="Корзина покупок" id="cart-region" role="region">
+        <div class="cart" id="cart">
+            <h3>Ваша корзина</h3>
+
+            <!-- Список элементов корзины -->
+            <div id="cart-list" class="cart-list" aria-live="polite"></div>
+
+            <!-- Пустая корзина (показывается, если нет товаров) -->
+            <div id="cart-empty" class="cart-empty">Корзина пуста.</div>
+
+            <!-- Итоги -->
+            <div class="cart-footer" id="cart-footer" aria-hidden="true" style="display:none;">
+                <div class="total">Итого: <span id="cart-total">0 сом</span></div>
+                <div style="display:flex;gap:8px;">
+                    <button id="checkout-btn">Оформить заказ</button>
+                    <button id="clear-cart" style="background:#fff;border:1px solid #eee;color:#333;">Очистить</button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+</main>
+
+<footer id="footer" class="footer">
+    <div>
+        <h4>О магазине</h4>
+        <p>Стильная женская одежда от лучших брендов.</p>
+    </div>
+    <div>
+        <h4>Навигация</h4>
+        <p><a href="#">Главная</a></p>
+        <p><a href="#cards">Каталог</a></p>
+    </div>
+    <div>
+        <h4>Контакты</h4>
+        <p>dilnuraadylbekova@gmail.com</p>
+        <p>+996551007547</p>
+    </div>
+
+    <a href="#" class="to-top">Наверх ↑</a>
+</footer>
+
+<!-- Скрипт корзины — аккуратно встроен, не меняет верстку -->
+<script>
+/*
+  Корзина: интеграция в существующий дизайн.
+  Работает с data-атрибутами карточек (data-id, data-name, data-price) и кнопками .add-to-cart
+  Хранение — localStorage, ключ 'fashion_cart_same_design_v1'
+*/
+
+(function(){
+  const STORAGE_KEY = 'fashion_cart_same_design_v1';
+
+  // Элементы
+  const addBtns = document.querySelectorAll('.add-to-cart');
+  const cartListEl = document.getElementById('cart-list');
+  const cartEmptyEl = document.getElementById('cart-empty');
+  const cartFooterEl = document.getElementById('cart-footer');
+  const cartTotalEl = document.getElementById('cart-total');
+  const clearBtn = document.getElementById('clear-cart');
+  const checkoutBtn = document.getElementById('checkout-btn');
+
+  // Состояние
+  let cart = loadCart();
+
+  // Привязка событий к кнопкам добавления
+  addBtns.forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const card = e.target.closest('.card');
+      if(!card) return;
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const price = Number(card.dataset.price || 0);
+      const img = card.querySelector('img')?.src || '';
+      addToCart({id,name,price,img});
+    });
+  });
+
+  // Очистка корзины
+  if(clearBtn){
+    clearBtn.addEventListener('click', ()=>{
+      if(confirm('Очистить корзину?')){
+        cart = {};
+        saveCart();
+        renderCart();
+      }
+    });
+  }
+
+  // Оформление (демо)
+  if(checkoutBtn){
+    checkoutBtn.addEventListener('click', ()=>{
+      const items = Object.values(cart);
+      if(items.length === 0){
+        alert('В корзине нет товаров.');
+        return;
+      }
+      const total = formatPrice(calculateTotal());
+      if(confirm('Оформить заказ на сумму ' + total + ' ?')){
+        // Для демонстрации — очистим корзину
+        cart = {};
+        saveCart();
+        renderCart();
+        alert('Спасибо! Ваш заказ принят.');
+      }
+    });
+  }
+
+  // Загрузка из localStorage
+  function loadCart(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){
+      console.error('Ошибка загрузки корзины', e);
+      return {};
+    }
+  }
+
+  function saveCart(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+    }catch(e){
+      console.error('Ошибка сохранения корзины', e);
+    }
+  }
+
+  function addToCart(product){
+    const {id,name,price,img} = product;
+    if(!id) return;
+    if(cart[id]) cart[id].qty += 1;
+    else cart[id] = {id,name,price,qty:1,img};
+    saveCart();
+    renderCart();
+    // Короткое текстовое уведомление (screen-reader и визуально)
+    announce(`${name} добавлен(а) в корзину`);
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id].qty += delta;
+    if(cart[id].qty <= 0) delete cart[id];
+    saveCart();
+    renderCart();
+  }
+
+  function removeItem(id){
+    if(!cart[id]) return;
+    delete cart[id];
+    saveCart();
+    renderCart();
+  }
+
+  function calculateTotal(){
+    return Object.values(cart).reduce((sum,item)=>sum + item.price * item.qty, 0);
+  }
+
+  function formatPrice(num){
+    return new Intl.NumberFormat('ru-RU').format(num) + ' сом';
+  }
+
+  // Рендер корзины внутри правого сайдбара
+  function renderCart(){
+    cartListEl.innerHTML = '';
+
+    const items = Object.values(cart);
+    if(items.length === 0){
+      cartEmptyEl.style.display = 'block';
+      cartFooterEl.style.display = 'none';
+      cartFooterEl.setAttribute('aria-hidden', 'true');
+      return;
+    } else {
+      cartEmptyEl.style.display = 'none';
+      cartFooterEl.style.display = 'block';
+      cartFooterEl.setAttribute('aria-hidden', 'false');
+    }
+
+    items.forEach(item=>{
+      const itemEl = document.createElement('div');
+      itemEl.className = 'cart-item';
+      itemEl.innerHTML = `
+        <img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.name)}">
+        <div class="info">
+          <div style="font-weight:700">${escapeHtml(item.name)}</div>
+          <div style="color:var(--muted);font-size:13px">${formatPrice(item.price)}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <div class="qty-controls" data-id="${item.id}">
+            <button class="qty-decr" aria-label="Уменьшить количество">−</button>
+            <div aria-live="polite" style="min-width:24px;text-align:center">${item.qty}</div>
+            <button class="qty-incr" aria-label="Увеличить количество">+</button>
+          </div>
+          <button class="remove-item" aria-label="Удалить товар" style="background:transparent;border:0;color:#c00;cursor:pointer">Удалить</button>
+        </div>
+      `;
+
+      // Слушатели
+      itemEl.querySelector('.qty-incr').addEventListener('click', ()=> changeQty(item.id, 1));
+      itemEl.querySelector('.qty-decr').addEventListener('click', ()=> changeQty(item.id, -1));
+      itemEl.querySelector('.remove-item').addEventListener('click', ()=>{
+        if(confirm('Удалить "'+item.name+'" из корзины?')) removeItem(item.id);
+      });
+
+      cartListEl.appendChild(itemEl);
+    });
+
+    cartTotalEl.textContent = formatPrice(calculateTotal());
+  }
+
+  // Простое aria-live уведомление
+  function announce(text){
+    const live = document.createElement('div');
+    live.className = 'visually-hidden';
+    live.setAttribute('aria-live', 'polite');
+    live.textContent = text;
+    document.body.appendChild(live);
+    setTimeout(()=>document.body.removeChild(live), 1400);
+  }
+
+  function escapeHtml(str){
+    if(!str) return '';
+    return String(str).replace(/[&<>"]/g, (c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+
+  // Инициализация: отрисовать корзину при загрузке
+  renderCart();
+
+  // Для дебага: можно вызывать window._cart из консоли
+  window._cart = {
+    add: (p)=>addToCart(p),
+    get: ()=>cart,
+    clear: ()=>{cart={};saveCart();renderCart();}
+  };
+})();
+</script>
+
 </body>
 </html>
