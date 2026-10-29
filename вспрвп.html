@@ -1,0 +1,739 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amaldin Tech — Магазин компьютерной техники</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0d14;
+            color: #ffffff;
+        }
+
+        header {
+            background: #111827;
+            padding: 20px;
+            border-bottom: 2px solid #36d6a5;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #36d6a5;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        nav a:hover {
+            color: #36d6a5;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #101827, #1b2940);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #36d6a5;
+        }
+
+        .hero p {
+            color: #b7c2d4;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #36d6a5;
+            color: #061b14;
+            padding: 14px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #24b98c;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            padding: 14px;
+            border: 1px solid #36d6a5;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .categories button {
+            padding: 10px 18px;
+            border: 1px solid #36d6a5;
+            background: #111827;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .categories button:hover,
+        .categories button.active {
+            background: #36d6a5;
+            color: #061b14;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .product {
+            background: #111827;
+            border: 1px solid #273449;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            border-color: #36d6a5;
+        }
+
+        .product-image {
+            font-size: 70px;
+            padding: 20px;
+        }
+
+        .product h3 {
+            margin: 10px 0;
+        }
+
+        .product p {
+            color: #aab6c8;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .price {
+            color: #36d6a5;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .product button {
+            width: 100%;
+        }
+
+        .cart {
+            background: #111827;
+            border: 1px solid #36d6a5;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #273449;
+        }
+
+        .remove {
+            background: transparent;
+            color: #ff7777;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            margin: 20px 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .contact-box {
+            background: #111827;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            line-height: 2;
+        }
+
+        .contact-box a {
+            color: #36d6a5;
+            text-decoration: none;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 15px;
+            max-width: 600px;
+            margin: 30px auto 0;
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            padding: 14px;
+            background: #111827;
+            border: 1px solid #273449;
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+        }
+
+        .contact-form textarea {
+            min-height: 120px;
+        }
+
+        footer {
+            background: #111827;
+            text-align: center;
+            padding: 25px;
+            color: #aab6c8;
+            border-top: 1px solid #273449;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">AMALDIN TECH</div>
+
+            <div>
+                <a href="#home">Главная</a>
+                <a href="#catalog">Каталог</a>
+                <a href="#cart">Корзина</a>
+                <a href="#contacts">Поддержка</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <div class="container">
+        <h1>Добро пожаловать в <span>Amaldin Tech</span></h1>
+
+        <p>
+            Всё для твоего компьютера в одном месте!<br>
+            Компьютеры, комплектующие, игровые устройства
+            и аксессуары по доступным ценам.
+        </p>
+
+        <a href="#catalog" class="button">Перейти в каталог</a>
+    </div>
+</section>
+
+<section id="catalog">
+    <div class="container">
+        <h2>Каталог товаров</h2>
+
+        <input
+            type="text"
+            id="search"
+            class="search"
+            placeholder="🔍 Найти товар..."
+        >
+
+        <div class="categories">
+            <button class="active" data-category="all">Все товары</button>
+            <button data-category="computers">Компьютеры</button>
+            <button data-category="components">Комплектующие</button>
+            <button data-category="peripherals">Периферия</button>
+            <button data-category="accessories">Аксессуары</button>
+        </div>
+
+        <div class="products" id="products"></div>
+    </div>
+</section>
+
+<section id="cart">
+    <div class="container">
+        <h2>🛒 Корзина</h2>
+
+        <div class="cart">
+            <div id="cart-items">
+                Твоя корзина пока пуста.
+            </div>
+
+            <div class="cart-total">
+                Итого: <span id="total">0</span> сом
+            </div>
+
+            <button class="button" onclick="checkout()">
+                Оформить заказ
+            </button>
+        </div>
+    </div>
+</section>
+
+<section id="contacts">
+    <div class="container">
+        <h2>📞 Контакты и поддержка</h2>
+
+        <div class="contact-box">
+            <h3>Amaldin Tech</h3>
+
+            <p>Поможем выбрать компьютер и комплектующие!</p>
+
+            <p>
+                Телефон:
+                <a href="tel:+996000000000">
+                    +996 XXX XXX XXX
+                </a>
+            </p>
+
+            <p>
+                WhatsApp:
+                <a href="https://wa.me/996000000000">
+                    Написать нам
+                </a>
+            </p>
+
+            <p>
+                График работы: ежедневно, 09:00–20:00
+            </p>
+        </div>
+
+        <form class="contact-form" id="support-form">
+            <input
+                type="text"
+                id="name"
+                placeholder="Твоё имя"
+                required
+            >
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Твой e-mail"
+                required
+            >
+
+            <select id="topic">
+                <option>Вопрос о товаре</option>
+                <option>Помощь с выбором компьютера</option>
+                <option>Мой заказ</option>
+                <option>Гарантия и возврат</option>
+                <option>Другой вопрос</option>
+            </select>
+
+            <textarea
+                id="message"
+                placeholder="Напиши свой вопрос..."
+                required
+            ></textarea>
+
+            <button class="button" type="submit">
+                Отправить сообщение
+            </button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <p>© <span id="year"></span> Amaldin Tech.</p>
+    <p>Твоя техника — твои возможности!</p>
+</footer>
+
+<script>
+    // Каталог товаров
+    const products = [
+        {
+            id: 1,
+            name: "Игровой компьютер",
+            category: "computers",
+            price: 65000,
+            image: "🖥️",
+            description: "Мощный компьютер для игр и работы."
+        },
+        {
+            id: 2,
+            name: "Офисный компьютер",
+            category: "computers",
+            price: 32000,
+            image: "💻",
+            description: "Для учёбы, документов и интернета."
+        },
+        {
+            id: 3,
+            name: "Игровой монитор",
+            category: "peripherals",
+            price: 14500,
+            image: "🖥️",
+            description: "Монитор для игр и мультимедиа."
+        },
+        {
+            id: 4,
+            name: "Механическая клавиатура",
+            category: "peripherals",
+            price: 4200,
+            image: "⌨️",
+            description: "Удобная клавиатура для игр и работы."
+        },
+        {
+            id: 5,
+            name: "Игровая мышь",
+            category: "peripherals",
+            price: 1800,
+            image: "🖱️",
+            description: "Точная мышь для любых задач."
+        },
+        {
+            id: 6,
+            name: "Наушники с микрофоном",
+            category: "peripherals",
+            price: 3500,
+            image: "🎧",
+            description: "Для музыки, общения и игр."
+        },
+        {
+            id: 7,
+            name: "Видеокарта",
+            category: "components",
+            price: 28000,
+            image: "🎮",
+            description: "Для обновления графики компьютера."
+        },
+        {
+            id: 8,
+            name: "Оперативная память 16 ГБ",
+            category: "components",
+            price: 4200,
+            image: "🧩",
+            description: "Для быстрой работы системы."
+        },
+        {
+            id: 9,
+            name: "SSD 1 ТБ",
+            category: "components",
+            price: 5800,
+            image: "💾",
+            description: "Быстрый накопитель для файлов."
+        },
+        {
+            id: 10,
+            name: "Материнская плата",
+            category: "components",
+            price: 8500,
+            image: "🔧",
+            description: "Основа компьютерной сборки."
+        },
+        {
+            id: 11,
+            name: "Веб-камера",
+            category: "accessories",
+            price: 2300,
+            image: "📷",
+            description: "Для видеозвонков и онлайн-уроков."
+        },
+        {
+            id: 12,
+            name: "Коврик для мыши",
+            category: "accessories",
+            price: 700,
+            image: "🟦",
+            description: "Удобная поверхность для мыши."
+        },
+        {
+            id: 13,
+            name: "Геймпад",
+            category: "accessories",
+            price: 2800,
+            image: "🎮",
+            description: "Для совместимых компьютерных игр."
+        },
+        {
+            id: 14,
+            name: "Wi-Fi роутер",
+            category: "accessories",
+            price: 3200,
+            image: "📡",
+            description: "Для домашнего интернета."
+        }
+    ];
+
+    let cart = [];
+    let currentCategory = "all";
+
+    const productsContainer = document.getElementById("products");
+
+    function formatPrice(price) {
+        return price.toLocaleString("ru-RU");
+    }
+
+    // Показываем товары
+    function showProducts() {
+        const query = document
+            .getElementById("search")
+            .value.toLowerCase()
+            .trim();
+
+        const filtered = products.filter(product => {
+            const matchesCategory =
+                currentCategory === "all" ||
+                product.category === currentCategory;
+
+            const matchesSearch =
+                product.name.toLowerCase().includes(query) ||
+                product.description.toLowerCase().includes(query);
+
+            return matchesCategory && matchesSearch;
+        });
+
+        productsContainer.innerHTML = "";
+
+        if (filtered.length === 0) {
+            productsContainer.innerHTML =
+                "<p>Товары не найдены.</p>";
+            return;
+        }
+
+        filtered.forEach(product => {
+            const card = document.createElement("article");
+            card.className = "product";
+
+            card.innerHTML = `
+                <div class="product-image">${product.image}</div>
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <div class="price">
+                    ${formatPrice(product.price)} сом
+                </div>
+                <button class="button" onclick="addToCart(${product.id})">
+                    Добавить в корзину
+                </button>
+            `;
+
+            productsContainer.appendChild(card);
+        });
+    }
+
+    // Добавляем товар в корзину
+    function addToCart(id) {
+        const item = cart.find(product => product.id === id);
+
+        if (item) {
+            item.quantity++;
+        } else {
+            cart.push({
+                id: id,
+                quantity: 1
+            });
+        }
+
+        showCart();
+    }
+
+    // Удаляем товар
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        showCart();
+    }
+
+    // Показываем корзину
+    function showCart() {
+        const container = document.getElementById("cart-items");
+
+        if (cart.length === 0) {
+            container.innerHTML = "Твоя корзина пока пуста.";
+            document.getElementById("total").textContent = "0";
+            return;
+        }
+
+        container.innerHTML = "";
+
+        let total = 0;
+
+        cart.forEach(item => {
+            const product = products.find(p => p.id === item.id);
+            const sum = product.price * item.quantity;
+
+            total += sum;
+
+            const row = document.createElement("div");
+            row.className = "cart-item";
+
+            const description = document.createElement("span");
+            description.textContent =
+                `${product.name} × ${item.quantity} — ${formatPrice(sum)} сом`;
+
+            const removeButton = document.createElement("button");
+            removeButton.className = "remove";
+            removeButton.textContent = "Удалить";
+            removeButton.onclick = () => removeFromCart(item.id);
+
+            row.append(description, removeButton);
+            container.appendChild(row);
+        });
+
+        document.getElementById("total").textContent =
+            formatPrice(total);
+    }
+
+    // Оформление заказа
+    function checkout() {
+        if (cart.length === 0) {
+            alert("Сначала добавь товары в корзину!");
+            return;
+        }
+
+        let order = "Здравствуйте! Хочу оформить заказ в Amaldin Tech:\n\n";
+        let total = 0;
+
+        cart.forEach(item => {
+            const product = products.find(p => p.id === item.id);
+            const sum = product.price * item.quantity;
+
+            order += `${product.name} × ${item.quantity} — ${formatPrice(sum)} сом\n`;
+            total += sum;
+        });
+
+        order += `\nИтого: ${formatPrice(total)} сом`;
+
+        alert(
+            "Твой заказ сформирован!\n\n" +
+            order +
+            "\n\nСвяжись с магазином, чтобы подтвердить заказ."
+        );
+    }
+
+    // Поиск
+    document.getElementById("search").addEventListener(
+        "input",
+        showProducts
+    );
+
+    // Фильтры категорий
+    document.querySelectorAll(".categories button").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".categories button")
+                .forEach(b => b.classList.remove("active"));
+
+            button.classList.add("active");
+            currentCategory = button.dataset.category;
+
+            showProducts();
+        });
+    });
+
+    // Форма поддержки
+    document.getElementById("support-form").addEventListener(
+        "submit",
+        function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const topic = document.getElementById("topic").value;
+            const message = document.getElementById("message").value;
+
+            const subject = encodeURIComponent(
+                "Amaldin Tech — " + topic
+            );
+
+            const body = encodeURIComponent(
+                "Имя: " + name +
+                "\nE-mail: " + email +
+                "\nТема: " + topic +
+                "\nСообщение: " + message
+            );
+
+            // ЗАМЕНИ адрес на настоящий e-mail магазина.
+            window.location.href =
+                "mailto:support@example.com?subject=" +
+                subject + "&body=" + body;
+        }
+    );
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+    showProducts();
+    showCart();
+</script>
+
+</body>
+</html>
